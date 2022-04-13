@@ -65,10 +65,10 @@
       "settings": {
         "servers": [
           {
-            "address": "aes256.gcm.freeplesk.com",
+            "address": "xxxxxx",
             "method": "aes-256-gcm",
             "ota": false,
-            "password": "87400246-23ce-4d62-9bf9-13eb39d68912",
+            "password": "xxxxx",
             "port": 2222,
             "level": 1
           }
@@ -88,10 +88,10 @@
       "settings": {
         "servers": [
           {
-            "address": "catdns.0.2x-hk.mydns.ltd",
+            "address": "xxxxxx",
             "method": "aes-256-gcm",
             "ota": false,
-            "password": "87400246-23ce-4d62-9bf9-13eb39d68912",
+            "password": "xxxxxx",
             "port": 4646,
             "level": 1
           }
