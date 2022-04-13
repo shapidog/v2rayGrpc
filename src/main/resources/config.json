@@ -1,0 +1,136 @@
+{
+  "log": {
+    "access": "access.log",
+    "error": "error.log",
+    "loglevel": "debug"
+  },
+  "api": {
+	"services": [
+		"HandlerService",
+        "RoutingService"
+	],
+	"tag": "api"
+  },
+  "inbounds": [
+    {
+      "tag": "S1",
+      "port": 10801,
+      "listen": "0.0.0.0",
+      "protocol": "http",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      },
+      "settings": {
+        "udp": false,
+        "allowTransparent": false
+      }
+    },
+	{
+      "tag": "S2",
+      "port": 10802,
+      "listen": "0.0.0.0",
+      "protocol": "http",
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      },
+      "settings": {
+        "udp": false,
+        "allowTransparent": false
+      }
+    }
+  ],
+  "inboundDetour": [
+	{
+		"listen": "0.0.0.0",
+		"port": 10085,
+		"protocol": "dokodemo-door",
+		"settings": {
+			"address": "127.0.0.1"
+		},
+		"tag": "api"
+	}
+  ],
+  "outbounds": [
+    {
+      "tag": "P1",
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "aes256.gcm.freeplesk.com",
+            "method": "aes-256-gcm",
+            "ota": false,
+            "password": "87400246-23ce-4d62-9bf9-13eb39d68912",
+            "port": 2222,
+            "level": 1
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp"
+      },
+      "mux": {
+        "enabled": true,
+        "concurrency": -1
+      }
+    },
+	{
+      "tag": "P2",
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "catdns.0.2x-hk.mydns.ltd",
+            "method": "aes-256-gcm",
+            "ota": false,
+            "password": "87400246-23ce-4d62-9bf9-13eb39d68912",
+            "port": 4646,
+            "level": 1
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp"
+      },
+      "mux": {
+        "enabled": true,
+        "concurrency": -1
+      }
+    }
+  ],
+  "routing": {
+    "strategy": "rules",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "S1"
+        ],
+        "outboundTag": "P1"
+      },
+	  {
+        "type": "field",
+        "inboundTag": [
+          "S2",
+		  "S88"
+        ],
+        "outboundTag": "P2"
+      },
+	  {
+        "type": "field",
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api"
+      }
+    ]
+  }
+}
